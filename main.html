@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>学情雷达 · 成绩分析系统</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- 顶部导航 -->
+    <header class="app-header">
+      <div class="header-left">
+        <svg class="header-logo" viewBox="0 0 36 36" fill="none">
+          <polygon points="18,4 31,12 27,28 9,28 5,12" fill="#165DFF" fill-opacity="0.15" stroke="#165DFF" stroke-width="2"/>
+          <polygon points="18,12 24,16 22,24 14,24 12,16" fill="none" stroke="#165DFF" stroke-width="1" opacity="0.4"/>
+          <circle cx="18" cy="4" r="2" fill="#165DFF"/>
+          <circle cx="31" cy="12" r="2" fill="#165DFF"/>
+          <circle cx="27" cy="28" r="2" fill="#165DFF"/>
+          <circle cx="9" cy="28" r="2" fill="#165DFF"/>
+          <circle cx="5" cy="12" r="2" fill="#165DFF"/>
+        </svg>
+        <span class="header-title">学情雷达 · 成绩分析系统</span>
+      </div>
+      <div class="header-right">
+        <span class="header-user" id="headerUser"></span>
+        <button class="btn-admin" id="btnAdmin" style="display:none;">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M7 1.5L1.5 4v6L7 12.5 12.5 10V4L7 1.5z" stroke="currentColor" stroke-width="1.3" fill="none"/>
+            <circle cx="7" cy="7" r="1.8" fill="currentColor"/>
+          </svg>
+          后台管理
+        </button>
+        <button class="btn-logout" id="btnLogout">退出登录</button>
+      </div>
+    </header>
+
+    <!-- Tab导航 -->
+    <nav class="tab-nav">
+      <button class="tab-item active" data-tab="grade">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <polygon points="8,2 14,6 12,14 4,14 2,6" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <polygon points="8,5 11,7 10,12 6,12 5,7" fill="currentColor" fill-opacity="0.2"/>
+        </svg>
+        <span>年级雷达图</span>
+      </button>
+      <button class="tab-item" data-tab="class">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <rect x="2" y="3" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <path d="M5 6h6M5 8.5h6M5 11h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+        <span>班级雷达图</span>
+      </button>
+      <button class="tab-item" data-tab="student">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="5.5" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M3 14c0-2.8 2.2-5 5-5s5 2.2 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span>学生雷达图</span>
+      </button>
+    </nav>
+
+    <!-- 主体内容 -->
+    <div class="app-body">
+      <!-- 左侧操作栏 -->
+      <aside class="sidebar">
+        <!-- 数据导入区 -->
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">数据导入</h3>
+          <button class="btn-secondary btn-block" id="btnDownloadTemplate">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M7 1v8M3.5 6L7 9l3.5-3M2 12h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            下载标准模板
+          </button>
+          <div class="upload-area" id="uploadArea">
+            <div class="upload-icon">
+              <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+                <path d="M18 24V8M11 15l7-7 7 7" stroke="#86909C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M6 24v4a2 2 0 002 2h20a2 2 0 002-2v-4" stroke="#86909C" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <p class="upload-text">点击或拖拽Excel文件到此处</p>
+            <p class="upload-hint">支持 .xlsx / .xls 格式</p>
+            <input type="file" id="fileInput" accept=".xlsx,.xls" style="display:none;"/>
+          </div>
+          <div class="import-status" id="importStatus" style="display:none;"></div>
+        </div>
+
+        <!-- 选择器区 -->
+        <div class="sidebar-section selector-section" id="selectorSection">
+          <h3 class="sidebar-title">数据筛选</h3>
+          <!-- 班级Tab选择器 -->
+          <div class="selector-group" id="classSelectorGroup" style="display:none;">
+            <label class="selector-label">选择班级</label>
+            <select class="custom-select" id="classSelect">
+              <option value="">请先导入数据</option>
+            </select>
+          </div>
+          <!-- 学生Tab选择器 -->
+          <div class="selector-group" id="studentSelectorGroup" style="display:none;">
+            <label class="selector-label">筛选班级</label>
+            <select class="custom-select" id="studentClassSelect">
+              <option value="">请先导入数据</option>
+            </select>
+            <label class="selector-label" style="margin-top:12px;">选择学生</label>
+            <div class="student-search-wrap">
+              <input type="text" class="student-search" id="studentSearch" placeholder="搜索学生姓名..."/>
+            </div>
+            <select class="custom-select" id="studentSelect" size="8">
+              <option value="">请先导入数据</option>
+            </select>
+          </div>
+          <!-- 年级Tab无选择器 -->
+          <div class="no-selector" id="noSelectorGroup">
+            <p class="no-selector-text">年级雷达图直接展示全年级数据，无需选择</p>
+          </div>
+        </div>
+
+        <!-- 下载区 -->
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">图表下载</h3>
+          <div class="download-options">
+            <div class="option-row">
+              <label class="option-label">格式</label>
+              <div class="option-btns" id="formatBtns">
+                <button class="opt-btn active" data-value="png">PNG</button>
+                <button class="opt-btn" data-value="pdf">PDF</button>
+              </div>
+            </div>
+            <div class="option-row">
+              <label class="option-label">分辨率</label>
+              <div class="option-btns" id="scaleBtns">
+                <button class="opt-btn" data-value="1">1x</button>
+                <button class="opt-btn active" data-value="2">2x</button>
+                <button class="opt-btn" data-value="3">3x</button>
+              </div>
+            </div>
+            <div class="option-row">
+              <label class="option-label">背景</label>
+              <div class="option-btns" id="bgBtns">
+                <button class="opt-btn active" data-value="white">白底</button>
+                <button class="opt-btn" data-value="transparent">透明</button>
+              </div>
+            </div>
+          </div>
+          <button class="btn-primary btn-block" id="btnDownloadSingle">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M7 1v8M3.5 6L7 9l3.5-3M2 12h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            下载当前图表
+          </button>
+          <button class="btn-secondary btn-block" id="btnBatchClass" style="display:none;">
+            批量导出全部班级图
+          </button>
+          <button class="btn-secondary btn-block" id="btnBatchStudent" style="display:none;">
+            批量导出全部学生图
+          </button>
+        </div>
+      </aside>
+
+      <!-- 右侧预览区 -->
+      <main class="preview-area">
+        <div class="chart-container" id="chartContainer">
+          <div class="chart-empty" id="chartEmpty">
+            <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+              <polygon points="40,10 68,28 58,66 22,66 12,28" fill="#165DFF" fill-opacity="0.05" stroke="#C9CDD4" stroke-width="2" stroke-dasharray="4,3"/>
+              <polygon points="40,25 55,34 50,56 30,56 25,34" fill="none" stroke="#C9CDD4" stroke-width="1.5" opacity="0.5"/>
+              <circle cx="40" cy="40" r="3" fill="#C9CDD4"/>
+            </svg>
+            <p class="empty-title">暂无数据</p>
+            <p class="empty-hint">请先导入Excel成绩数据或点击演示体验</p>
+            <button class="btn-primary" id="btnLoadDemo">加载示例数据</button>
+          </div>
+          <div class="chart-wrapper" id="chartWrapper" style="display:none;">
+            <div class="chart-title-area" id="chartTitleArea"></div>
+            <div class="chart-canvas" id="chartCanvas"></div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- 全局提示Toast -->
+  <div class="global-toast" id="globalToast" style="display:none;">
+    <span id="globalToastText"></span>
+  </div>
+
+  <!-- 加载遮罩 -->
+  <div class="loading-overlay" id="loadingOverlay" style="display:none;">
+    <div class="loading-box">
+      <div class="loading-spinner"></div>
+      <p id="loadingText">正在处理...</p>
+    </div>
+  </div>
+
+  <script src="libs/echarts.min.js"></script>
+  <script src="libs/xlsx.full.min.js"></script>
+  <script src="libs/jszip.min.js"></script>
+  <script src="libs/FileSaver.min.js"></script>
+  <script src="libs/jspdf.umd.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/calculator.js"></script>
+  <script src="js/excel.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/download.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>后台管理 · 学情雷达</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- 顶部导航 -->
+    <header class="app-header">
+      <div class="header-left">
+        <svg class="header-logo" viewBox="0 0 36 36" fill="none">
+          <polygon points="18,4 31,12 27,28 9,28 5,12" fill="#165DFF" fill-opacity="0.15" stroke="#165DFF" stroke-width="2"/>
+          <polygon points="18,12 24,16 22,24 14,24 12,16" fill="none" stroke="#165DFF" stroke-width="1" opacity="0.4"/>
+          <circle cx="18" cy="4" r="2" fill="#165DFF"/>
+          <circle cx="31" cy="12" r="2" fill="#165DFF"/>
+          <circle cx="27" cy="28" r="2" fill="#165DFF"/>
+          <circle cx="9" cy="28" r="2" fill="#165DFF"/>
+          <circle cx="5" cy="12" r="2" fill="#165DFF"/>
+        </svg>
+        <span class="header-title">后台管理 · 账号管理</span>
+      </div>
+      <div class="header-right">
+        <span class="header-user" id="headerUser"></span>
+        <button class="btn-admin" id="btnBackMain">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          返回主页
+        </button>
+        <button class="btn-logout" id="btnLogout">退出登录</button>
+      </div>
+    </header>
+
+    <!-- 主体内容 -->
+    <div class="admin-body">
+      <div class="admin-toolbar">
+        <div class="toolbar-left">
+          <h2 class="admin-page-title">账号管理</h2>
+          <span class="admin-count" id="accountCount">共 0 个账号</span>
+        </div>
+        <div class="toolbar-right">
+          <button class="btn-primary" id="btnAddAccount">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M7 2v10M2 7h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            新增账号
+          </button>
+        </div>
+      </div>
+
+      <div class="admin-table-wrap">
+        <table class="admin-table" id="accountTable">
+          <thead>
+            <tr>
+              <th style="width: 50px;">序号</th>
+              <th>账号</th>
+              <th>姓名</th>
+              <th>角色</th>
+              <th>状态</th>
+              <th>创建日期</th>
+              <th>备注</th>
+              <th style="width: 200px;">操作</th>
+            </tr>
+          </thead>
+          <tbody id="accountTableBody">
+          </tbody>
+        </table>
+      </div>
+
+      <div class="admin-tips">
+        <p>提示：系统至少需要保留一个管理员账号；停用状态的账号无法登录系统。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 新增/编辑账号弹窗 -->
+  <div class="modal-overlay" id="accountModal" style="display:none;">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modalTitle">新增账号</h3>
+        <button class="modal-close" id="modalClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">账号 <span class="required">*</span></label>
+          <input type="text" class="form-input" id="modalUsername" placeholder="请输入登录账号" maxlength="20"/>
+          <span class="form-error" id="modalUsernameError"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">姓名 <span class="required">*</span></label>
+          <input type="text" class="form-input" id="modalDisplayName" placeholder="请输入显示姓名" maxlength="20"/>
+          <span class="form-error" id="modalDisplayNameError"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">密码 <span class="required">*</span></label>
+          <input type="text" class="form-input" id="modalPassword" placeholder="请输入登录密码" maxlength="32"/>
+          <span class="form-error" id="modalPasswordError"></span>
+        </div>
+        <div class="form-row">
+          <div class="form-group" style="flex:1; margin-right:12px;">
+            <label class="form-label">角色</label>
+            <select class="form-select" id="modalRole">
+              <option value="admin">管理员</option>
+              <option value="teacher">教师</option>
+            </select>
+          </div>
+          <div class="form-group" style="flex:1;">
+            <label class="form-label">状态</label>
+            <select class="form-select" id="modalStatus">
+              <option value="active">启用</option>
+              <option value="disabled">停用</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">备注</label>
+          <input type="text" class="form-input" id="modalRemark" placeholder="可选，如：班主任、教务等" maxlength="50"/>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="modalCancel">取消</button>
+        <button class="btn-primary" id="modalConfirm">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 重置密码弹窗 -->
+  <div class="modal-overlay" id="pwdModal" style="display:none;">
+    <div class="modal-box" style="max-width:420px;">
+      <div class="modal-header">
+        <h3>重置密码</h3>
+        <button class="modal-close" id="pwdModalClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-info">正在为账号 <b id="pwdModalUsername"></b> 重置密码</p>
+        <div class="form-group">
+          <label class="form-label">新密码 <span class="required">*</span></label>
+          <input type="text" class="form-input" id="newPassword" placeholder="请输入新密码" maxlength="32"/>
+          <span class="form-error" id="newPasswordError"></span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="pwdModalCancel">取消</button>
+        <button class="btn-primary" id="pwdModalConfirm">确定重置</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 删除确认弹窗 -->
+  <div class="modal-overlay" id="delModal" style="display:none;">
+    <div class="modal-box" style="max-width:400px;">
+      <div class="modal-header">
+        <h3>删除确认</h3>
+        <button class="modal-close" id="delModalClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-info">确定要删除账号 <b id="delModalUsername"></b> 吗？</p>
+        <p class="modal-warn">删除后不可恢复，该账号将无法登录系统。</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="delModalCancel">取消</button>
+        <button class="btn-danger" id="delModalConfirm">确认删除</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 全局提示Toast -->
+  <div class="global-toast" id="globalToast" style="display:none;">
+    <span id="globalToastText"></span>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

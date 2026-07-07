@@ -1,0 +1,223 @@
+/* ===== 全局重置 ===== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+
+/* ===== 登录容器 ===== */
+.login-container { display: flex; width: 100%; height: 100vh; }
+
+/* ===== 左侧品牌区 ===== */
+.brand-panel {
+  width: 55%; height: 100%;
+  background: linear-gradient(135deg, #EBF3FF 0%, #D6E8FF 40%, #C5DEFF 100%);
+  display: flex; flex-direction: column;
+  padding: 40px 56px; position: relative; overflow: hidden;
+}
+.brand-panel::before {
+  content: ''; position: absolute; top: -120px; right: -120px;
+  width: 360px; height: 360px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(22,93,255,0.08) 0%, transparent 70%);
+}
+.brand-panel::after {
+  content: ''; position: absolute; bottom: -80px; left: -80px;
+  width: 280px; height: 280px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(22,93,255,0.06) 0%, transparent 70%);
+}
+
+.brand-logo {
+  display: flex; align-items: center; gap: 10px;
+  position: relative; z-index: 1;
+}
+.radar-icon { width: 36px; height: 36px; flex-shrink: 0; }
+.brand-name {
+  font-size: 18px; font-weight: 700; color: #165DFF; letter-spacing: 0.5px;
+}
+
+.brand-illustration {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  position: relative; z-index: 1;
+}
+.brand-illustration svg { width: 100%; max-width: 400px; height: auto; }
+
+.brand-features {
+  display: flex; flex-direction: column; gap: 14px;
+  position: relative; z-index: 1; margin-bottom: 20px;
+}
+.feature-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 14px; color: #1D2129; line-height: 1.6;
+}
+.check-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: #165DFF; color: #fff; font-size: 11px;
+  flex-shrink: 0; margin-top: 2px;
+}
+
+.brand-footer {
+  font-size: 12px; color: #86909C; position: relative; z-index: 1;
+}
+
+/* ===== 右侧表单区 ===== */
+.form-panel {
+  width: 45%; height: 100%;
+  background: #fff;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.login-card {
+  width: 380px; padding: 40px 36px;
+  background: #fff; border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.login-header { text-align: center; margin-bottom: 32px; }
+.login-title { font-size: 26px; font-weight: 700; color: #1D2129; letter-spacing: 1px; }
+.login-subtitle { font-size: 14px; color: #86909C; margin-top: 6px; }
+
+/* ===== 警示条 ===== */
+.login-alert {
+  display: flex; align-items: center; gap: 8px;
+  background: #FFF0F0; border: 1px solid #FFCCC7; border-radius: 6px;
+  padding: 10px 14px; margin-bottom: 20px;
+  color: #F53F3F; font-size: 13px;
+  animation: shake 0.4s ease;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+/* ===== 表单字段 ===== */
+.form-field { margin-bottom: 18px; }
+.input-wrap {
+  display: flex; align-items: center;
+  border: 1.5px solid #E5E6EB; border-radius: 8px;
+  padding: 0 12px; height: 44px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background: #fff;
+}
+.input-wrap:focus-within {
+  border-color: #165DFF; box-shadow: 0 0 0 3px rgba(22,93,255,0.1);
+}
+.input-wrap.error { border-color: #F53F3F; box-shadow: 0 0 0 3px rgba(245,63,63,0.1); }
+.input-icon { flex-shrink: 0; margin-right: 8px; }
+.input-wrap input {
+  flex: 1; border: none; outline: none; background: transparent;
+  font-size: 14px; color: #1D2129; height: 100%;
+}
+.input-wrap input::placeholder { color: #C9CDD4; }
+
+.toggle-password {
+  border: none; background: none; cursor: pointer;
+  padding: 4px; display: flex; align-items: center;
+  flex-shrink: 0;
+}
+
+.field-error {
+  font-size: 12px; color: #F53F3F; margin-top: 4px; padding-left: 4px; height: 16px;
+}
+
+/* ===== 辅助操作栏 ===== */
+.form-options {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 24px; font-size: 13px;
+}
+.remember-check {
+  display: flex; align-items: center; gap: 6px; cursor: pointer; color: #4E5969;
+}
+.remember-check input { display: none; }
+.checkbox-custom {
+  width: 16px; height: 16px; border: 1.5px solid #C9CDD4; border-radius: 3px;
+  display: inline-block; position: relative; transition: all 0.2s;
+}
+.remember-check input:checked + .checkbox-custom {
+  background: #165DFF; border-color: #165DFF;
+}
+.remember-check input:checked + .checkbox-custom::after {
+  content: ''; position: absolute; left: 4px; top: 1px;
+  width: 5px; height: 8px; border: solid #fff;
+  border-width: 0 2px 2px 0; transform: rotate(45deg);
+}
+.forgot-link { color: #165DFF; text-decoration: none; }
+.forgot-link:hover { text-decoration: underline; }
+
+/* ===== 按钮 ===== */
+.btn-login {
+  width: 100%; height: 44px; border: none; border-radius: 8px;
+  background: #165DFF; color: #fff; font-size: 16px; font-weight: 600;
+  letter-spacing: 4px; cursor: pointer; transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center;
+}
+.btn-login:hover { background: #0E42D2; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(22,93,255,0.3); }
+.btn-login:active { transform: translateY(0); }
+.btn-login:disabled { background: #94BFFF; cursor: not-allowed; transform: none; box-shadow: none; }
+.btn-loading { display: none; align-items: center; justify-content: center; }
+.btn-login.loading .btn-text { display: none; }
+.btn-login.loading .btn-loading { display: flex; }
+
+.spinner {
+  width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,0.3);
+  border-top-color: #fff; border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.btn-demo {
+  width: 100%; margin-top: 12px; padding: 8px;
+  border: none; background: none; color: #86909C;
+  font-size: 13px; cursor: pointer; transition: color 0.2s;
+}
+.btn-demo:hover { color: #165DFF; }
+
+/* ===== 安全提示 ===== */
+.security-tip {
+  margin-top: 24px; padding-top: 20px;
+  border-top: 1px solid #F2F3F5;
+  font-size: 12px; color: #86909C; text-align: center; line-height: 1.6;
+}
+
+/* ===== Toast弹窗 ===== */
+.toast-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.4); z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.toast-box {
+  background: #fff; border-radius: 12px; padding: 32px 40px;
+  text-align: center; max-width: 360px;
+  animation: scaleIn 0.25s cubic-bezier(0.16,1,0.3,1);
+}
+@keyframes scaleIn {
+  from { transform: scale(0.85); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.toast-icon { margin-bottom: 16px; display: flex; justify-content: center; }
+.toast-text { font-size: 15px; color: #1D2129; margin-bottom: 20px; line-height: 1.6; }
+.toast-btn {
+  padding: 8px 32px; border: none; border-radius: 6px;
+  background: #165DFF; color: #fff; font-size: 14px; cursor: pointer;
+  transition: background 0.2s;
+}
+.toast-btn:hover { background: #0E42D2; }
+
+/* ===== 响应式 ===== */
+@media (max-width: 1024px) {
+  .login-container { flex-direction: column; height: auto; min-height: 100vh; overflow-y: auto; }
+  html, body { overflow-y: auto; }
+  .brand-panel { width: 100%; padding: 30px 24px; min-height: 280px; }
+  .brand-illustration { display: none; }
+  .brand-features { gap: 8px; }
+  .feature-item { font-size: 13px; }
+  .form-panel { width: 100%; padding: 24px; }
+  .login-card { width: 100%; max-width: 380px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+}
+@media (max-width: 480px) {
+  .brand-panel { padding: 24px 20px; }
+  .brand-name { font-size: 16px; }
+  .brand-features { display: none; }
+  .login-card { padding: 28px 24px; }
+  .login-title { font-size: 22px; }
+}
